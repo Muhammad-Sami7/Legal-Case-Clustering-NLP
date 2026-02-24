@@ -4,45 +4,56 @@
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 ## Project Overview
-This project automatically organizes and clusters legal judgment PDF documents using **unsupervised machine learning**. It leverages **TF-IDF vectorization** and **K-Means clustering** to group similar documents, with **RAKE** keyword extraction and reconstruction of clustered PDFs.  
+This project applies **unsupervised machine learning** to automatically cluster legal judgment PDF documents collected from the **Lahore High Court**.
 
-The goal is to help legal professionals retrieve and analyze grouped documents efficiently.
+Using **TF-IDF vectorization** and **K-Means clustering**, the system groups similar legal documents based on textual content. Additionally, **RAKE keyword extraction** is used to summarize document themes, and clustered files are reconstructed into organized PDF folders.
+
+The objective is to assist legal professionals in efficiently organizing and analyzing large volumes of judgments.
+
+---
+
+## Dataset
+- 50 legal judgment PDFs manually collected from Lahore High Court.
+- Documents were processed without predefined labels (unsupervised learning).
+- Raw PDFs are not included due to legal and licensing considerations.
 
 ---
 
 ## Objective
 - Automatically cluster legal judgment PDFs by content similarity.  
-- Extract top keywords from each document for better insight.  
-- Reconstruct clustered documents back to PDFs for practical use.
+- Extract meaningful keywords from each document.  
+- Organize clustered documents into structured folders.  
+- Reconstruct clustered text files back into PDFs for practical use.
 
 ---
 
 ## Methodology
 
-1. **PDF Text Extraction**
-   - Used `PyMuPDF` to extract text from PDFs.  
-   - Cleaned text (removed page numbers, special characters, whitespace).  
-   - Saved as `.txt` files.
+### 1. PDF Text Extraction
+- Used `PyMuPDF` to extract text from PDF files.
+- Cleaned text (removed page numbers, special characters, extra whitespace).
+- Saved cleaned content as `.txt` files.
 
-2. **TF-IDF Vectorization**
-   - Converted text into numerical features using `TfidfVectorizer`.  
-   - Parameters:
-     - `stop_words='english'`
-     - `max_df=0.9`
-     - `min_df=2`
+### 2. TF-IDF Vectorization
+- Converted text into numerical features using `TfidfVectorizer`.
+- Parameters:
+  - `stop_words='english'`
+  - `max_df=0.9`
+  - `min_df=2`
 
-3. **K-Means Clustering**
-   - Clustered documents into 5 groups using `KMeans(n_clusters=5)`.  
-   - Saved trained model and vectorizer with `joblib`.  
-   - **Performance Metric:** Silhouette Score = 0.0359
+### 3. K-Means Clustering
+- Clustered documents into **5 clusters** using:
+  - `KMeans(n_clusters=5)`
+- Saved trained model and vectorizer using `joblib`.
+- Evaluated using **Silhouette Score**.
 
-4. **Keyword Extraction**
-   - Used RAKE to extract top 5 keywords per document.  
-   - Stored keywords with filenames and cluster IDs in `cluster_summary.xlsx`.
+### 4. Keyword Extraction
+- Used **RAKE** to extract top 5 keywords per document.
+- Stored keywords with filenames and cluster IDs in `cluster_summary.xlsx`.
 
-5. **Cluster-wise Organization**
-   - Grouped `.txt` files into cluster folders.  
-   - Converted clustered `.txt` files back to PDFs using `FPDF`.
+### 5. Cluster Organization
+- Grouped `.txt` files into cluster-specific folders.
+- Converted clustered `.txt` files back to PDFs using `FPDF`.
 
 ---
 
@@ -50,27 +61,20 @@ The goal is to help legal professionals retrieve and analyze grouped documents e
 
 | Metric | Value |
 |--------|-------|
+| Number of Documents | 50 |
 | Number of Clusters | 5 |
 | Silhouette Score | 0.0359 |
-| Model Saved To | `Model1/` |
-| Summary Excel File | `cluster_summary.xlsx` |
+| Model Directory | `Model1/` |
+| Summary File | `cluster_summary.xlsx` |
 | Clustered PDFs | `cluster_pdf/cluster_X/*.pdf` |
 
 ---
 
 ## Observations
-- Clustering works, but low silhouette score indicates overlapping features in legal text.  
-- Better preprocessing (lemmatization, entity removal) or topic modeling (LDA) can improve results.  
-- Converting documents back to PDFs aids real-world legal workflows.
-
----
-
-## Future Improvements
-- **Better Vectorization:** Use Word2Vec, Doc2Vec, or BERT embeddings.  
-- **Dimensionality Reduction:** Apply PCA or t-SNE to improve cluster separation.  
-- **Advanced Clustering:** Use DBSCAN, Agglomerative, or HDBSCAN.  
-- **Evaluation:** Manual validation with domain experts.  
-- **UI/Interface:** Streamlit or Flask app to upload and view clustered documents.
+- Clustering successfully grouped documents, but:
+- **Low Silhouette Score (0.0359)** indicates overlapping textual patterns in legal judgments.
+- Legal language is highly similar across categories, making unsupervised separation challenging.
+- Keyword extraction helped interpret cluster themes.
 
 ---
 
